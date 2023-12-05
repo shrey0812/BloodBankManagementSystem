@@ -22,14 +22,24 @@ import javax.swing.JOptionPane;
  */
 public class addNewDonor extends javax.swing.JFrame {
     
-    private DonorDataManager dataManager;
-    private File dataFile = new File("donor_data.dat");
+      private DonorDataManager dataManager;
+      private File dataFile = new File("donor_data.dat");
+    String donorId;
+    String name;
+    String fatherName;
+    String motherName;
+    String DOB;
+    String MobileNo;
+    String gender;
+    String email;
+    String bloodGroup;
+    String city;
 
     /**
      * Creates new form addNewDonar
      */
     public addNewDonor() {
-        System.out.println("I am here");
+//        System.out.println("I am here");
         dataManager= readDonorData();
         initComponents();
     }
@@ -226,17 +236,29 @@ public class addNewDonor extends javax.swing.JFrame {
     }//GEN-LAST:event_formComponentShown
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        String donorId=jTextField7.getText();
-        String name = jTextField1.getText();
-        String fatherName= jTextField2.getText();
-        String motherName = jTextField3.getText();
-        SimpleDateFormat dFormat= new SimpleDateFormat("dd-mm-yyyy");
-        String DOB = dFormat.format(jDateChooser1.getDate());
-        String MobileNo= jTextField4.getText();
-        String gender = (String)jComboBox1.getSelectedItem();
-        String email = jTextField5.getText();
-        String bloodGroup = (String)jComboBox2.getSelectedItem();
-        String city = jTextField6.getText();
+//        String donorId=jTextField7.getText();
+//        String name = jTextField1.getText();
+//        String fatherName= jTextField2.getText();
+//        String motherName = jTextField3.getText();
+//        SimpleDateFormat dFormat= new SimpleDateFormat("dd-mm-yyyy");
+//        String DOB = dFormat.format(jDateChooser1.getDate());
+//        String MobileNo= jTextField4.getText();
+//        String gender = (String)jComboBox1.getSelectedItem();
+//        String email = jTextField5.getText();
+//        String bloodGroup = (String)jComboBox2.getSelectedItem();
+//        String city = jTextField6.getText();
+          donorId=jTextField7.getText();
+          name = jTextField1.getText();
+          fatherName= jTextField2.getText();
+          motherName = jTextField3.getText();
+          SimpleDateFormat dFormat= new SimpleDateFormat("dd-mm-yyyy");
+          DOB = dFormat.format(jDateChooser1.getDate());
+          MobileNo= jTextField4.getText();
+          gender = (String)jComboBox1.getSelectedItem();
+          email = jTextField5.getText();
+          bloodGroup = (String)jComboBox2.getSelectedItem();
+          city = jTextField6.getText();
+          new home().details(donorId,name,fatherName,motherName,DOB,MobileNo,gender,email,bloodGroup,city);
         
 //        try{
 //            Connection con = ConnectionProvider.getCon();
@@ -250,15 +272,15 @@ public class addNewDonor extends javax.swing.JFrame {
 //            JOptionPane.showMessageDialog(null, e);
 //        }
 
-        Donor donor = new Donor(donorId,name,fatherName,motherName,DOB,MobileNo,gender,email,bloodGroup,city);
-        ArrayList<Donor> currentUserList = dataManager.getAllDonorData().isEmpty()
-                        ? new ArrayList<>()
-                        : dataManager.getAllDonorData().get(dataManager.getAllDonorData().size() - 1);
-                currentUserList.add(donor);
-        dataManager.addDonorList(currentUserList);
-        System.out.println("UserList:");
-        dataManager.printAllDonorData();
-              writeDonorData(dataManager);
+//        Donor donor = new Donor(donorId,name,fatherName,motherName,DOB,MobileNo,gender,email,bloodGroup,city);
+//        ArrayList<Donor> currentUserList = dataManager.getAllDonorData().isEmpty()
+//                        ? new ArrayList<>()
+//                        : dataManager.getAllDonorData().get(dataManager.getAllDonorData().size() - 1);
+//                currentUserList.add(donor);
+//        dataManager.addDonorList(currentUserList);
+//        System.out.println("UserList:");
+//        dataManager.printAllDonorData();
+//              writeDonorData(dataManager);
             jTextField1.setText("");
             jTextField2.setText("");
             jTextField3.setText("");
@@ -270,7 +292,10 @@ public class addNewDonor extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        System.out.println("I am in close");
         setVisible(false);
+        dataManager.printAllDonorData();
+        System.out.println("I am in close");
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
@@ -281,13 +306,13 @@ public class addNewDonor extends javax.swing.JFrame {
     /**
      * @param args the command line arguments
      */
-    private void writeDonorData(DonorDataManager dataManager) {
-        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(dataFile))) {
-            oos.writeObject(dataManager);
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-    }
+//    private void writeDonorData(DonorDataManager dataManager) {
+//        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(dataFile))) {
+//            oos.writeObject(dataManager);
+//        } catch (IOException ex) {
+//            ex.printStackTrace();
+//        }
+//    }
     private DonorDataManager readDonorData() {
         if (dataFile.exists()) {
         if (!dataFile.delete()) {
@@ -304,6 +329,7 @@ public class addNewDonor extends javax.swing.JFrame {
         }
         return new DonorDataManager();
     }
+
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">

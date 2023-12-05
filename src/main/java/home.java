@@ -1,4 +1,14 @@
 
+import Project.Donor;
+import Project.DonorDataManager;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import javax.swing.JOptionPane;
 
 /*
@@ -11,11 +21,17 @@ import javax.swing.JOptionPane;
  * @author HP
  */
 public class home extends javax.swing.JFrame {
+    
+    private DonorDataManager dataManager;
+    private File dataFile = new File("donor_data.dat");
+    ArrayList<Donor> currentUserList;
 
     /**
      * Creates new form home
      */
     public home() {
+       // System.out.println("I am here");
+        dataManager= readDonorData();
         initComponents();
     }
 
@@ -188,7 +204,11 @@ public class home extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+       loadDataFromFile();
+        System.out.println("I am in add donor");
         new addNewDonor().setVisible(true);
+        dataManager.printAllDonorData();
+        System.out.println("I am in add donor");
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
@@ -222,6 +242,59 @@ public class home extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jMenuItem11ActionPerformed
 
+    public void details(String donorId,String name,String fatherName,String motherName,String DOB,String MobileNo,String gender,String email,String bloodGroup,String city){
+        Donor donor = new Donor(donorId,name,fatherName,motherName,DOB,MobileNo,gender,email,bloodGroup,city);
+        currentUserList = dataManager.getAllDonorData().isEmpty()
+                        ? new ArrayList<>()
+                        : dataManager.getAllDonorData().get(dataManager.getAllDonorData().size() - 1);
+                currentUserList.add(donor);
+        dataManager.addDonorList(currentUserList);
+        System.out.println("UserList:");
+        dataManager.printAllDonorData();
+              writeDonorData(dataManager);
+              saveDataToFile();
+    }
+    private void writeDonorData(DonorDataManager dataManager) {
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(dataFile))) {
+            oos.writeObject(dataManager);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }
+    private DonorDataManager readDonorData() {
+        if (dataFile.exists()) {
+        if (!dataFile.delete()) {
+            System.err.println("Failed to delete existing data file.");
+            // Handle the failure to delete the file appropriately
+        }
+    }
+        if (dataFile.exists()) {
+            try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(dataFile))) {
+                return (DonorDataManager) ois.readObject();
+            } catch (IOException | ClassNotFoundException ex) {
+                ex.printStackTrace();
+            }
+        }
+        return new DonorDataManager();
+    }
+        private void saveDataToFile() {
+    try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("donor_data.dat"))) {
+        oos.writeObject(currentUserList);
+    } catch (IOException e) {
+        e.printStackTrace();
+        // Handle the exception
+    }
+}
+
+// Load data from file when opening the page
+private void loadDataFromFile() {
+    try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("donor_data.dat"))) {
+        currentUserList = (ArrayList<Donor>) ois.readObject();
+    } catch (IOException | ClassNotFoundException e) {
+        e.printStackTrace();
+        // Handle the exception
+    }
+}
     /**
      * @param args the command line arguments
      */
@@ -283,4 +356,5 @@ public class home extends javax.swing.JFrame {
     private javax.swing.JPopupMenu.Separator jSeparator5;
     private javax.swing.JPopupMenu.Separator jSeparator6;
     // End of variables declaration//GEN-END:variables
+
 }
